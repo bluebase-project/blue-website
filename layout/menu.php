@@ -35,7 +35,7 @@
 							<li><a href="items.php">Items</a> </li>
 						<?php endif; ?>
 						<li><a href="serverinfo.php">Serverinfo</a> </li>
-						<li><a href="spells.php">Spells</a> </li>
+						<li><a href="moves.php">Moves</a> </li>
 					</ul>
 				</li>
 				<li><a href="support.php"><i class="fa fa-info-circle"></i> Support</a>
