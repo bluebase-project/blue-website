@@ -593,7 +593,7 @@ function user_get_killer_id($kn) {
 	$data = mysql_select_single("SELECT `player_id` FROM `player_killers` WHERE `kill_id`='$kn';");
 	return ($data !== false) ? $data['player_id'] : false;
 }
-// same (killer id ---> monster name)
+// same (killer id ---> pokemon name)
 function user_get_killer_m_name($mn) {
 	$mn = (int)$mn;
 	$data = mysql_select_single("SELECT `name` FROM `environment_killers` WHERE `kill_id`='$mn';");

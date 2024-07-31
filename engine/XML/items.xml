@@ -17137,7 +17137,7 @@
 		<attribute key="magiclevelpoints" value="2" />
 	</item>
 	<item id="9779" article="a" name="crystal column" />
-	<item id="9780" article="a" name="slain monster">
+	<item id="9780" article="a" name="slain pokemon">
 		<attribute key="weight" value="120000" />
 		<attribute key="containerSize" value="10" />
 		<attribute key="decayTo" value="9781" />
@@ -17145,7 +17145,7 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="9781" article="a" name="slain monster">
+	<item id="9781" article="a" name="slain pokemon">
 		<attribute key="weight" value="120000" />
 		<attribute key="containerSize" value="10" />
 		<attribute key="decayTo" value="9782" />
@@ -17153,7 +17153,7 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="9782" article="a" name="slain monster">
+	<item id="9782" article="a" name="slain pokemon">
 		<attribute key="weight" value="120000" />
 		<attribute key="containerSize" value="10" />
 		<attribute key="decayTo" value="9783" />
@@ -17161,7 +17161,7 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="9783" article="a" name="slain monster">
+	<item id="9783" article="a" name="slain pokemon">
 		<attribute key="weight" value="120000" />
 		<attribute key="containerSize" value="10" />
 		<attribute key="decayTo" value="0" />
@@ -30232,8 +30232,8 @@
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="21558" article="a" name="ghost pacifier" />
-	<item id="21559" article="a" name="monster nest" />
-	<item id="21560" article="a" name="destroyed monster nest">
+	<item id="21559" article="a" name="pokemon nest" />
+	<item id="21560" article="a" name="destroyed pokemon nest">
 		<attribute key="decayTo" value="21559" />
 		<attribute key="duration" value="120" />
 	</item>
@@ -31105,7 +31105,7 @@
 	<item id="22536" article="a" name="dead weight">
 		<attribute key="weight" value="750" />
 	</item>
-	<item id="22537" article="a" name="trapped bad dream monster">
+	<item id="22537" article="a" name="trapped bad dream pokemon">
 		<attribute key="weight" value="1200" />
 	</item>
 	<item id="22538" article="a" name="bowl of terror sweat">
@@ -35955,32 +35955,32 @@
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="300" />
 	</item>
-	<item id="26217" article="a" name="slain monster">
+	<item id="26217" article="a" name="slain pokemon">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="26218" />
 		<attribute key="duration" value="600" />
 	</item>
-	<item id="26218" article="a" name="slain monster">
+	<item id="26218" article="a" name="slain pokemon">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="26219" />
 		<attribute key="duration" value="600" />
 	</item>
-	<item id="26219" article="a" name="slain monster">
+	<item id="26219" article="a" name="slain pokemon">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="300" />
 	</item>
-	<item id="26220" article="a" name="slain monster">
+	<item id="26220" article="a" name="slain pokemon">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="26221" />
 		<attribute key="duration" value="600" />
 	</item>
-	<item id="26221" article="a" name="slain monster">
+	<item id="26221" article="a" name="slain pokemon">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="26222" />
 		<attribute key="duration" value="300" />
 	</item>
-	<item id="26222" article="a" name="slain monster">
+	<item id="26222" article="a" name="slain pokemon">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="300" />

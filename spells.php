@@ -61,7 +61,7 @@ if (user_logged_in() && is_admin($user_data)) {
 						}
 					}
 				}
-				// Exclude monster spells (Monster spells looks like this on the ORTS data pack)
+				// Exclude pokemon spells (Pokemon spells looks like this on the ORTS data pack)
 				$words = (isset($attributes['words'])) ? $attributes['words'] : false;
 				// Also exclude "house spells" such as aleta sio.
 				$name = (isset($attributes['name'])) ? $attributes['name'] : false;

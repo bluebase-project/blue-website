@@ -1,7 +1,7 @@
 <?php require_once 'engine/init.php'; include 'layout/overall/header.php'; ?>
 
 <?php
-###### MONSTER LOOT CHECKER ######
+###### POKEMON LOOT CHECKER ######
 ###### VERSION: 1.5
 
 $otdir = 'misc/';
@@ -35,9 +35,9 @@ $rarity = array(
 		$add = '&lootrate';
 	echo '<a href="' . htmlspecialchars($_SERVER['PHP_SELF'] . ($add ? '?lootrate' : '')) . '">Hide None</a> | ';
 	echo '<a href="?hidefail' . $add . '">Hide Not Found</a> | ';
-	echo '<a href="?hideempty' . $add . '">Hide Monsters Without Loot</a> | ';
+	echo '<a href="?hideempty' . $add . '">Hide Pokemons Without Loot</a> | ';
 	echo '<a href="?hideempty&hidefail' . $add . '">Hide All</a> | ';
-	echo '<a href="monsters_loot.php">Use Normal Loot Rate</a> | ';
+	echo '<a href="pokemons_loot.php">Use Normal Loot Rate</a> | ';
 	echo '<a href="?lootrate">Use Server Loot Rate</a>';
 ?>
 <br><br>
@@ -52,20 +52,20 @@ $rarity = array(
 		$lootRate = $config['rate_loot'];
 	}
 
-	$monsters = simplexml_load_file($otdir . '/data/monster/monsters.xml') or die('<b>Could not load monsters!</b>');
-	foreach($monsters->monster as $monster) {
-		$loot = simplexml_load_file($otdir . '/data/monster/' . $monster['file']);
+	$pokemons = simplexml_load_file($otdir . '/data/pokemon/pokemons.xml') or die('<b>Could not load pokemons!</b>');
+	foreach($pokemons->pokemon as $pokemon) {
+		$loot = simplexml_load_file($otdir . '/data/pokemon/' . $pokemon['file']);
 		if($loot) {
 			if($item = $loot->loot->item) {
 				echo '
-					<a id="' . ++$i . '" style="text-decoration: none; font: bold 14px verdana; color: orange;" href="javascript:void(0);" onclick="toggleVisibility(this)">[+] ' . $monster['name'] . '</a>
+					<a id="' . ++$i . '" style="text-decoration: none; font: bold 14px verdana; color: orange;" href="javascript:void(0);" onclick="toggleVisibility(this)">[+] ' . $pokemon['name'] . '</a>
 					<br><div style="display: none;" id="d' . $i . '"><br>';
 				addLoot($item);
 				echo '<br></pre></div>';
 			} elseif(!isset($_GET['hideempty']))
-				echo '<span style="font: bold 14px verdana; color: red;">[x] ' . $monster['name'] . '</span><br>';
+				echo '<span style="font: bold 14px verdana; color: red;">[x] ' . $pokemon['name'] . '</span><br>';
 		} elseif(!isset($_GET['hidefail']))
-			echo '<span style="color: white;">Failed to load monster <b>' . $monster[name] . '</b> <i>(' . $monster[file] . ')</i><br>';
+			echo '<span style="color: white;">Failed to load pokemon <b>' . $pokemon[name] . '</b> <i>(' . $pokemon[file] . ')</i><br>';
 	}
 
 function addLoot($loot, $level=1) {

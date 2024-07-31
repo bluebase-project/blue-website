@@ -27,8 +27,8 @@ if ($deaths) {
 		echo "<td>". getClock($death['time'], true) ."</td>";
 		if ($death['is_player'] == 1) echo "<td>Player: <a href='characterprofile.php?name=". $death['killed_by'] ."'>". $death['killed_by'] ."</a></td>";
 		else if ($death['is_player'] == 0) {
-			if ($config['ServerEngine'] == 'TFS_03') echo "<td>Monster: ". ucfirst(str_replace("a ", "", $death['killed_by'])) ."</td>";
-			else echo "<td>Monster: ". ucfirst($death['killed_by']) ."</td>";
+			if ($config['ServerEngine'] == 'TFS_03') echo "<td>Pokemon: ". ucfirst(str_replace("a ", "", $death['killed_by'])) ."</td>";
+			else echo "<td>Pokemon: ". ucfirst($death['killed_by']) ."</td>";
 		}
 		else echo "<td>". $death['killed_by'] ."</td>";
 		echo '</tr>';
