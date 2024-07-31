@@ -1,36 +1,36 @@
 <?php require_once 'engine/init.php'; include 'layout/overall/header.php';
 
-// Loading spell list
-$spellsCache = new Cache('engine/cache/spells');
-$spellsCache->useMemory(false);
+// Loading move list
+$movesCache = new Cache('engine/cache/moves');
+$movesCache->useMemory(false);
 if (user_logged_in() && is_admin($user_data)) {
 	if (isset($_GET['update'])) {
-		echo "<p><strong>Logged in as admin, loading engine/XML/spells.xml file and updating cache.</strong></p>";
-		// SPELLS XML TO PHP ARRAY
-		$spellsXML = simplexml_load_file("engine/XML/spells.xml");
-		if ($spellsXML !== false) {
+		echo "<p><strong>Logged in as admin, loading engine/XML/moves.xml file and updating cache.</strong></p>";
+		// MOVES XML TO PHP ARRAY
+		$movesXML = simplexml_load_file("engine/XML/moves.xml");
+		if ($movesXML !== false) {
 			$types = array();
 			$type_attr = array();
 			$groups = array();
 
-			// This empty array will eventually contain all spells grouped by type and indexed by spell name
-			$spells = array();
+			// This empty array will eventually contain all moves grouped by type and indexed by move name
+			$moves = array();
 
-			// Loop through each XML spell object
-			foreach ($spellsXML as $type => $spell) {
-				// Get spell types
+			// Loop through each XML move object
+			foreach ($movesXML as $type => $move) {
+				// Get move types
 				if (!in_array($type, $types)) {
 					$types[] = $type;
 					$type_attr[$type] = array();
 				}
-				// Get spell attributes
+				// Get move attributes
 				$attributes = array();
 				// Extract attribute values from the XML object and store it in a more manage friendly way $attributes
-				foreach ($spell->attributes() as $aName => $aValue)
+				foreach ($move->attributes() as $aName => $aValue)
 					$attributes["$aName"] = "$aValue";
 				// Remove unececsary attributes
 				if (isset($attributes['script'])) unset($attributes['script']);
-				if (isset($attributes['spellid'])) unset($attributes['spellid']);
+				if (isset($attributes['moveid'])) unset($attributes['moveid']);
 				//if (isset($attributes['id'])) unset($attributes['id']);
 				//if (isset($attributes['conjureId'])) unset($attributes['conjureId']);
 				if (isset($attributes['function'])) unset($attributes['function']);
@@ -44,14 +44,14 @@ if (user_logged_in() && is_admin($user_data)) {
 					if (!in_array($attr, $type_attr[$type]))
 						$type_attr[$type][] = $attr;
 				}
-				// Get spell groups
+				// Get move groups
 				if (isset($attributes['group'])) {
 					if (!in_array($attributes['group'], $groups))
 						$groups[] = $attributes['group'];
 				}
-				// Get spell vocations
+				// Get move vocations
 				$vocations = array();
-				foreach ($spell->vocation as $vocation) {
+				foreach ($move->vocation as $vocation) {
 					foreach ($vocation->attributes() as $attributeName => $attributeValue) {
 						if ("$attributeName" == "name") {
 							$vocId = vocation_name_to_id("$attributeValue");
@@ -61,22 +61,22 @@ if (user_logged_in() && is_admin($user_data)) {
 						}
 					}
 				}
-				// Exclude pokemon spells (Pokemon spells looks like this on the ORTS data pack)
+				// Exclude pokemon moves (Pokemon moves looks like this on the ORTS data pack)
 				$words = (isset($attributes['words'])) ? $attributes['words'] : false;
-				// Also exclude "house spells" such as aleta sio.
+				// Also exclude "house moves" such as aleta sio.
 				$name = (isset($attributes['name'])) ? $attributes['name'] : false;
 				if (substr($words, 0, 3) !== '###' && substr($name, 0, 5) !== 'House') {
-					// Build full spell list where the spell name is the key to the spell array.
-					$spells[$type][$name] = array('vocations' => $vocations);
-					// Populate spell array with potential relevant attributes for the spell type
+					// Build full move list where the move name is the key to the move array.
+					$moves[$type][$name] = array('vocations' => $vocations);
+					// Populate move array with potential relevant attributes for the move type
 					foreach ($type_attr[$type] as $att)
-						$spells[$type][$name][$att] = (isset($attributes[$att])) ? $attributes[$att] : false;
+						$moves[$type][$name][$att] = (isset($attributes[$att])) ? $attributes[$att] : false;
 				}
 			}
 
-			// Sort the spell list properly
-			foreach (array_keys($spells) as $type) {
-				usort($spells[$type], function ($a, $b) {
+			// Sort the move list properly
+			foreach (array_keys($moves) as $type) {
+				usort($moves[$type], function ($a, $b) {
 					if (isset($a['lvl']))
 						return $a['lvl'] - $b['lvl'];
 					if (isset($a['maglv']))
@@ -84,48 +84,48 @@ if (user_logged_in() && is_admin($user_data)) {
 					return -1;
 				});
 			}
-			$spellsCache->setContent($spells);
-			$spellsCache->save();
+			$movesCache->setContent($moves);
+			$movesCache->save();
 		} else {
-			echo "<p><strong>Failed to load engine/XML/spells.xml file.</strong></p>";
+			echo "<p><strong>Failed to load engine/XML/moves.xml file.</strong></p>";
 		}
 	} else {
-		$spells = $spellsCache->load();
+		$moves = $movesCache->load();
 		?>
 		<form action="">
 			<input type="submit" name="update" value="Generate new cache">
 		</form>
 		<?php
 	}
-	// END SPELLS XML TO PHP ARRAY
+	// END MOVES XML TO PHP ARRAY
 } else {
-	$spells = $spellsCache->load();
+	$moves = $movesCache->load();
 }
-// End loading spell list
+// End loading move list
 
-if ($spells) {
+if ($moves) {
 	// Preparing data
 	$configVoc = $config['vocations'];
-	$types = array_keys($spells);
+	$types = array_keys($moves);
 	$itemServer = 'http://'.$config['shop']['imageServer'].'/';
 
-	// Filter spells by vocation
+	// Filter moves by vocation
 	$getVoc = (isset($_GET['vocation'])) ? getValue($_GET['vocation']) : 'all';
 	if ($getVoc !== 'all') {
 		$getVoc = (int)$getVoc;
 		foreach ($types as $type)
-			foreach ($spells[$type] as $name => $spell)
-				if (!empty($spell['vocations']))
-					if (!in_array($getVoc, $spell['vocations']))
-						unset($spells[$type][$name]);
+			foreach ($moves[$type] as $name => $move)
+				if (!empty($move['vocations']))
+					if (!in_array($getVoc, $move['vocations']))
+						unset($moves[$type][$name]);
 	}
 
 	// Render HTML
 	?>
 
-	<h1 id="spells">Spells<?php if ($getVoc !== 'all') echo ' ('.$configVoc[$getVoc]['name'].')';?></h1>
+	<h1 id="moves">Moves<?php if ($getVoc !== 'all') echo ' ('.$configVoc[$getVoc]['name'].')';?></h1>
 
-	<form action="#spells" class="filter_spells">
+	<form action="#moves" class="filter_moves">
 		<label for="vocation">Filter vocation:</label>
 		<select id="vocation" name="vocation">
 			<option value="all">All</option>
@@ -136,15 +136,15 @@ if ($spells) {
 		<input type="submit" value="Search">
 	</form>
 
-	<h2>Spell types:</h2>
+	<h2>Move types:</h2>
 	<ul>
 		<?php foreach ($types as $type): ?>
-		<li><a href="#spell_<?php echo $type; ?>"><?php echo ucfirst($type); ?></a></li>
+		<li><a href="#move_<?php echo $type; ?>"><?php echo ucfirst($type); ?></a></li>
 		<?php endforeach; ?>
 	</ul>
 
-	<h2 id="spell_instant">Instant Spells</h2>
-	<a href="#spells">Jump to top</a>
+	<h2 id="move_instant">Instant Moves</h2>
+	<a href="#moves">Jump to top</a>
 	<table class="table tbl-hover">
 		<tbody>
 			<tr class="yellow">
@@ -154,19 +154,19 @@ if ($spells) {
 				<td>Mana</td>
 				<td>Vocations</td>
 			</tr>
-			<?php foreach ($spells['instant'] as $spell): ?>
+			<?php foreach ($moves['instant'] as $move): ?>
 			<tr>
-				<td><?php echo $spell['name']; ?></td>
-				<td><?php echo $spell['words']; ?></td>
-				<td><?php echo $spell['lvl']; ?></td>
-				<td><?php echo $spell['mana']; ?></td>
+				<td><?php echo $move['name']; ?></td>
+				<td><?php echo $move['words']; ?></td>
+				<td><?php echo $move['lvl']; ?></td>
+				<td><?php echo $move['mana']; ?></td>
 				<td><?php
-				if (!empty($spell['vocations'])) {
+				if (!empty($move['vocations'])) {
 					if ($getVoc !== 'all') {
 						echo $configVoc[$getVoc]['name'];
 					} else {
 						$names = array();
-						foreach ($spell['vocations'] as $id) {
+						foreach ($move['vocations'] as $id) {
 							if (isset($configVoc[$id]))
 								$names[] = $configVoc[$id]['name'];
 						}
@@ -179,8 +179,8 @@ if ($spells) {
 		</tbody>
 	</table>
 
-	<h2 id="spell_rune">Magical Runes</h2>
-	<a href="#spells">Jump to top</a>
+	<h2 id="move_rune">Magical Runes</h2>
+	<a href="#moves">Jump to top</a>
 	<table class="table tbl-hover">
 		<tbody>
 			<tr class="yellow">
@@ -190,19 +190,19 @@ if ($spells) {
 				<td>Image</td>
 				<td>Vocations</td>
 			</tr>
-			<?php foreach ($spells['rune'] as $spell): ?>
+			<?php foreach ($moves['rune'] as $move): ?>
 			<tr>
-				<td><?php echo $spell['name']; ?></td>
-				<td><?php echo $spell['lvl']; ?></td>
-				<td><?php echo $spell['maglv']; ?></td>
-				<td><img src="<?php echo $itemServer.$spell['id'].'.gif'; ?>" alt="Rune image"></td>
+				<td><?php echo $move['name']; ?></td>
+				<td><?php echo $move['lvl']; ?></td>
+				<td><?php echo $move['maglv']; ?></td>
+				<td><img src="<?php echo $itemServer.$move['id'].'.gif'; ?>" alt="Rune image"></td>
 				<td><?php
-				if (!empty($spell['vocations'])) {
+				if (!empty($move['vocations'])) {
 					if ($getVoc !== 'all') {
 						echo $configVoc[$getVoc]['name'];
 					} else {
 						$names = array();
-						foreach ($spell['vocations'] as $id) {
+						foreach ($move['vocations'] as $id) {
 							if (isset($configVoc[$id]))
 								$names[] = $configVoc[$id]['name'];
 						}
@@ -215,9 +215,9 @@ if ($spells) {
 		</tbody>
 	</table>
 
-	<?php if (isset($spells['conjure'])): ?>
-	<h2 id="spell_conjure">Conjure Spells</h2>
-	<a href="#spells">Jump to top</a>
+	<?php if (isset($moves['conjure'])): ?>
+	<h2 id="move_conjure">Conjure Moves</h2>
+	<a href="#moves">Jump to top</a>
 	<table class="table tbl-hover">
 		<tbody>
 			<tr class="yellow">
@@ -230,22 +230,22 @@ if ($spells) {
 				<td>Image</td>
 				<td>Vocations</td>
 			</tr>
-			<?php foreach ($spells['conjure'] as $spell): ?>
+			<?php foreach ($moves['conjure'] as $move): ?>
 			<tr>
-				<td><?php echo $spell['name']; ?></td>
-				<td><?php echo $spell['words']; ?></td>
-				<td><?php echo $spell['lvl']; ?></td>
-				<td><?php echo $spell['mana']; ?></td>
-				<td><?php echo $spell['soul']; ?></td>
-				<td><?php echo $spell['conjureCount']; ?></td>
-				<td><img src="<?php echo $itemServer.$spell['conjureId'].'.gif'; ?>" alt="Rune image"></td>
+				<td><?php echo $move['name']; ?></td>
+				<td><?php echo $move['words']; ?></td>
+				<td><?php echo $move['lvl']; ?></td>
+				<td><?php echo $move['mana']; ?></td>
+				<td><?php echo $move['soul']; ?></td>
+				<td><?php echo $move['conjureCount']; ?></td>
+				<td><img src="<?php echo $itemServer.$move['conjureId'].'.gif'; ?>" alt="Rune image"></td>
 				<td><?php
-				if (!empty($spell['vocations'])) {
+				if (!empty($move['vocations'])) {
 					if ($getVoc !== 'all') {
 						echo $configVoc[$getVoc]['name'];
 					} else {
 						$names = array();
-						foreach ($spell['vocations'] as $id) {
+						foreach ($move['vocations'] as $id) {
 							if (isset($configVoc[$id]))
 								$names[] = $configVoc[$id]['name'];
 						}
@@ -257,22 +257,22 @@ if ($spells) {
 			<?php endforeach; ?>
 		</tbody>
 	</table>
-	<a href="#spells">Jump to top</a>
+	<a href="#moves">Jump to top</a>
 	<?php endif; ?>
 	<?php
 } else {
 	?>
-	<h1>Spells</h1>
-	<p>Spells have currently not been loaded into the website by the server admin.</p>
+	<h1>Moves</h1>
+	<p>Moves have currently not been loaded into the website by the server admin.</p>
 	<?php
 }
 
 /* Debug tests
-foreach ($spells as $type => $spells) {
-	data_dump($spells, false, "Type: $type");
+foreach ($moves as $type => $moves) {
+	data_dump($moves, false, "Type: $type");
 }
 
-// All spell attributes?
+// All move attributes?
 'group', 'words', 'lvl', 'level', 'maglv', 'magiclevel', 'charges', 'allowfaruse', 'blocktype', 'mana', 'soul', 'prem', 'aggressive', 'range', 'selftarget', 'needtarget', 'blockwalls', 'needweapon', 'exhaustion', 'groupcooldown', 'needlearn', 'casterTargetOrDirection', 'direction', 'params', 'playernameparam', 'conjureId', 'reagentId', 'conjureCount', 'vocations'
 */
 include 'layout/overall/footer.php'; ?>

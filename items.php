@@ -142,7 +142,7 @@ if ($items) {
 				break;
 			case 'book':
 				$slottype = 'shield';
-				$slottype_name = 'Spellbooks';
+				$slottype_name = 'Movebooks';
 				break;
 			case 'legs':
 				$slottype = 'legs';
@@ -162,7 +162,7 @@ if ($items) {
 				break;
 			case 'shield':
 				$slottype = 'shield';
-				$slottype_name = 'Shields & Spellbooks';
+				$slottype_name = 'Shields & Movebooks';
 				break;
 			case 'backpack':
 				$slottype = 'backpack';
@@ -189,7 +189,7 @@ if ($items) {
 			<tr>
 				<td style="text-align:center;"><a href="?slot=helmet">Helmets<br><img src="<?php echo $itemServer.'2471.gif'; ?>" /></a></td>
 				<td style="text-align:center;"><a href="?slot=sword">Swords<br><img src="<?php echo $itemServer.'8931.gif'; ?>" /></a></td>
-				<td style="text-align:center;"><a href="?slot=shield">Shields & Spellbooks<br><img src="<?php echo $itemServer.'2523.gif'; ?>" /></a></td>
+				<td style="text-align:center;"><a href="?slot=shield">Shields & Movebooks<br><img src="<?php echo $itemServer.'2523.gif'; ?>" /></a></td>
 				<td style="text-align:center;"><a href="?slot=necklace">Amulets<br><img src="<?php echo $itemServer.'2173.gif'; ?>" /></a></td>
 			</tr>
 			<tr>

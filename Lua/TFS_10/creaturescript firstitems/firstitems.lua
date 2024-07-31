@@ -20,7 +20,7 @@ end
 local config = {
 	[1] = { -- Sorcerer
 		items = {
-			{2175, 1}, -- spellbook
+			{2175, 1}, -- movebook
 			{2190, 1}, -- wand of vortex
 			{8819, 1}, -- magician's robe
 			{8820, 1}, -- mage hat
@@ -36,7 +36,7 @@ local config = {
 	},
 	[2] = { -- Druid
 		items = {
-			{2175, 1}, -- spellbook
+			{2175, 1}, -- movebook
 			{2182, 1}, -- snakebite rod
 			{8819, 1}, -- magician's robe
 			{8820, 1}, -- mage hat
